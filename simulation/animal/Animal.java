@@ -12,7 +12,7 @@ import java.util.Random;
 import static tasks.simulation.Field.EntityGroup;
 
 public abstract class Animal extends Entity {
-    protected Map<Class<? extends Entity>, Double> chances = new HashMap<>();
+    protected static final Map<Class<? extends Entity>, Double> chances = new HashMap<>();
 
     public enum Direction {
         RIGHT, LEFT, UP, DOWN

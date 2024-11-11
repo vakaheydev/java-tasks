@@ -2,6 +2,8 @@ package tasks.simulation;
 
 import tasks.simulation.animal.EntityType;
 
+import java.util.Objects;
+
 public abstract class Entity {
     public Entity(Field field, int x, int y) {
         this.field = field;
@@ -10,15 +12,10 @@ public abstract class Entity {
         weight = initialWeight();
     }
 
-    protected double weight;
+    protected static double weight;
 
     protected Field field;
     protected Point point;
-
-//    public void setPos(int x, int y) {
-//        field.addEntity(x, y, this);
-//        point = new Point(x, y);
-//    }
 
     public boolean isAnimal() {
         return getEntityType().equals(EntityType.ANIMAL);
