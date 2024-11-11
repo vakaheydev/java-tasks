@@ -3,11 +3,15 @@ package tasks.simulation;
 import tasks.simulation.animal.EntityType;
 
 import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 
 public abstract class Entity {
+    private final int hashId;
     public Entity(Field field, int x, int y) {
         this.field = field;
         this.point = new Point(x, y);
+        this.hashId = 31 * 17 + field.getEntityGroup(x, y).entityCnt(getClass());
         field.addEntity(x, y, this);
         weight = initialWeight();
     }
@@ -38,6 +42,19 @@ public abstract class Entity {
 
     public boolean isAlive() {
         return field.getEntityPoint(this) != null;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Entity entity = (Entity) object;
+        return Objects.equals(field, entity.field) && Objects.equals(point, entity.point);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass().getSimpleName(), field, point, hashId);
     }
 
     @Override

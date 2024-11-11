@@ -96,4 +96,12 @@ public final class EntityUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static <T> T createInstance(Field field, Class<? extends Entity> clazz) {
+        try {
+            return (T) clazz.getConstructor(Field.class, int.class, int.class).newInstance(field, 0, 0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
