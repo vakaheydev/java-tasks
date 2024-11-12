@@ -10,10 +10,7 @@ public final class AnimalMoveUtil {
     }
 
     public static void randomMove(Animal animal, int moveCnt) {
-        if (animal.speed() < moveCnt) {
-            throw new IllegalArgumentException(String.format("Specified moves amount[%d] is higher than animal " +
-                    "speed[%d]", moveCnt, animal.speed()));
-        }
+        checkSpeed(animal, moveCnt);
 
         for (int i = 0; i < moveCnt; i++) {
             randomMove(animal);
@@ -21,8 +18,14 @@ public final class AnimalMoveUtil {
     }
 
     public static void randomMove(Animal animal) {
-        Point point = animal.getPoint();
-        Direction rndDirection = PointUtil.getRandomDirection(point);
+        Direction rndDirection = PointUtil.getRandomDirection(animal.getPoint());
         animal.move(rndDirection);
+    }
+
+    private static void checkSpeed(Animal animal, int moveCnt) {
+        if (animal.speed() < moveCnt) {
+            throw new IllegalArgumentException(String.format("Specified moves amount[%d] is higher than animal " +
+                    "speed[%d]", moveCnt, animal.speed()));
+        }
     }
 }

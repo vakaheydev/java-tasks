@@ -36,7 +36,7 @@ public class EntityTest {
     public void checkEntityGroup(Field.EntityGroup group, Class<? extends Entity> clazz) {
         List<Entity> entities = new ArrayList<>(group.getEntities());
 
-        Entity entity = EntityUtil.createInstance(field, clazz);
+        Entity entity = EntityUtil.newInstance(field, clazz);
 
         int hashCode = entity.hashCode();
 

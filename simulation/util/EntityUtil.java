@@ -21,44 +21,33 @@ public final class EntityUtil {
     }
 
     public static void addEntities(Field field, Point point, Class<? extends Entity> clazz, int amount) {
+        checkMaxQuantity(field, clazz, amount);
+
+        for (int i = 0; i < amount; i++) {
+            newInstance(field, point, clazz);
+        }
+    }
+
+    private static void checkMaxQuantity(Field field, Class<? extends Entity> clazz, int amount) {
         int maxAmount = getMaxQuantity(field, clazz);
         if (amount > maxAmount) {
             throw new IllegalArgumentException(String.format("Specified amount[%d] is higher than entity[%s] max " +
                     "amount[%d] on location", amount, clazz.getSimpleName(), maxAmount));
         }
-
-        for (int i = 0; i < amount; i++) {
-            try {
-                Entity entity = clazz.getConstructor(Field.class, int.class, int.class)
-                        .newInstance(field, point.x(), point.y());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     public static void addEntities(Field field, Class<? extends Entity> clazz, int amount) {
         for (int i = 0; i < amount; i++) {
-            try {
-                Point point = PointUtil.getRandomPoint(field, clazz);
-                Entity entity = clazz.getConstructor(Field.class, int.class, int.class)
-                        .newInstance(field, point.x(), point.y());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            Point point = PointUtil.getRandomPoint(field, clazz);
+            newInstance(field, clazz);
         }
     }
 
     public static void addEntities(Field field, int amount) {
         for (int i = 0; i < amount; i++) {
-            try {
-                Class<? extends Entity> clazz = getRandomClass();
-                Point point = PointUtil.getRandomPoint(field, clazz);
-                Entity entity = clazz.getConstructor(Field.class, int.class, int.class)
-                        .newInstance(field, point.x(), point.y());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            Class<? extends Entity> clazz = getRandomClass();
+            Point point = PointUtil.getRandomPoint(field, clazz);
+            newInstance(field, clazz);
         }
     }
 
@@ -97,7 +86,15 @@ public final class EntityUtil {
         }
     }
 
-    public static <T> T createInstance(Field field, Class<? extends Entity> clazz) {
+    public static <T> T newInstance(Field field, Point point, Class<? extends Entity> clazz) {
+        try {
+            return (T) clazz.getConstructor(Field.class, int.class, int.class).newInstance(field, point.x(), point.y());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T newInstance(Field field, Class<? extends Entity> clazz) {
         try {
             return (T) clazz.getConstructor(Field.class, int.class, int.class).newInstance(field, 0, 0);
         } catch (Exception e) {

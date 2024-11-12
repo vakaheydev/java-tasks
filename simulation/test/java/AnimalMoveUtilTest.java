@@ -1,12 +1,18 @@
 package tasks.simulation.test.java;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.simulation.Field;
 import tasks.simulation.Point;
 import tasks.simulation.animal.Animal;
+import tasks.simulation.animal.herbivore.Caterpillar;
 import tasks.simulation.animal.herbivore.Herbivore;
 import tasks.simulation.util.AnimalMoveUtil;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static tasks.simulation.animal.Animal.Direction.*;
 
 public class AnimalMoveUtilTest {
     static class NotHungryAnimal extends Herbivore {
@@ -68,9 +74,9 @@ public class AnimalMoveUtilTest {
         for (int i = 0; i < 1000; i++) {
             AnimalMoveUtil.randomMove(animal);
             if (animal.getPoint().equals(new Point(0, 1))) {
-                animal.move(Animal.Direction.UP);
+                animal.move(UP);
             } else if (animal.getPoint().equals(new Point(1, 0))) {
-                animal.move(Animal.Direction.LEFT);
+                animal.move(LEFT);
             }
         }
         System.out.println(animal);
@@ -84,9 +90,9 @@ public class AnimalMoveUtilTest {
         for (int i = 0; i < 1000; i++) {
             AnimalMoveUtil.randomMove(animal);
             if (animal.getPoint().equals(new Point(0, height - 1))) {
-                animal.move(Animal.Direction.DOWN);
+                animal.move(DOWN);
             } else if (animal.getPoint().equals(new Point(1, height))) {
-                animal.move(Animal.Direction.LEFT);
+                animal.move(LEFT);
             }
         }
         System.out.println(animal);
@@ -101,9 +107,9 @@ public class AnimalMoveUtilTest {
         for (int i = 0; i < 1000; i++) {
             AnimalMoveUtil.randomMove(animal);
             if (animal.getPoint().equals(new Point(width, height - 1))) {
-                animal.move(Animal.Direction.DOWN);
+                animal.move(DOWN);
             } else if (animal.getPoint().equals(new Point(width - 1, height))) {
-                animal.move(Animal.Direction.RIGHT);
+                animal.move(RIGHT);
             }
         }
         System.out.println(animal);
@@ -117,12 +123,20 @@ public class AnimalMoveUtilTest {
         for (int i = 0; i < 1000; i++) {
             AnimalMoveUtil.randomMove(animal);
             if (animal.getPoint().equals(new Point(width, 1))) {
-                animal.move(Animal.Direction.UP);
+                animal.move(UP);
             } else if (animal.getPoint().equals(new Point(width - 1, 0))) {
-                animal.move(Animal.Direction.RIGHT);
+                animal.move(RIGHT);
             }
         }
         System.out.println(animal);
         System.out.println(field);
+    }
+
+    @Test
+    void testAnimalWithZeroSpeedMove() {
+        Animal animal = new Caterpillar(field, 0, 0);
+        AnimalMoveUtil.randomMove(animal);
+        assertEquals(new Point(0, 0), field.getEntityPoint(animal));
+        assertEquals(new Point(0, 0), animal.getPoint());
     }
 }

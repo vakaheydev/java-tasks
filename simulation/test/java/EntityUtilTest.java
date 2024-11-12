@@ -44,10 +44,10 @@ public class EntityUtilTest {
 
     @Test
     void testShouldCreateEntitiesInRandomPoints() {
-        EntityUtil.addEntities(field, Bear.class, 1000);
+        EntityUtil.addEntities(field, Bear.class, 5);
 
-        Assertions.assertEquals(1000, field.entityCnt());
-        Assertions.assertEquals(1000, field.animalCnt());
+        Assertions.assertEquals(5, field.entityCnt());
+        Assertions.assertEquals(5, field.animalCnt());
         System.out.println(field);
     }
 

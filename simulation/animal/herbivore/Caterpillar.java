@@ -24,6 +24,10 @@ public class Caterpillar extends Herbivore {
     }
 
     @Override
+    public void move(Direction... directions) {
+    }
+
+    @Override
     public double neededFoodWeight() {
         return 0;
     }

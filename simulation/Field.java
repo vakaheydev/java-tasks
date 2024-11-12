@@ -1,5 +1,7 @@
 package tasks.simulation;
 
+import tasks.simulation.exception.TooMuchEntitiesException;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +28,7 @@ public class Field {
             entititesCntMap.merge(entity.getClass(), 1, (oldValue, subtrahend) -> oldValue - subtrahend );
         }
 
-        public Set<Entity> getEntities() {
+        public final Set<Entity> getEntities() {
             return entities;
         }
 
@@ -75,6 +77,19 @@ public class Field {
     public void addEntity(int x, int y, Entity entity) {
         checkPos(x, y);
         checkMaxQuantity(entity, x, y);
+        increaseCounters(entity);
+        field[y][x].addEntity(entity);
+        entityPointMap.put(entity, new Point(x, y));
+    }
+
+    public void removeEntity(Entity entity) {
+        Point point = entityPointMap.get(entity);
+        decreaseCounters(entity);
+        field[point.y()][point.x()].removeEntity(entity);
+        entityPointMap.remove(entity);
+    }
+
+    private void increaseCounters(Entity entity) {
         if (!entityPointMap.containsKey(entity)) {
             if (entity.isPlant()) {
                 plantCnt++;
@@ -82,13 +97,9 @@ public class Field {
                 animalCnt++;
             }
         }
-        field[y][x].addEntity(entity);
-        entityPointMap.put(entity, new Point(x, y));
     }
 
-    public void removeEntity(Entity entity) {
-        Point point = entityPointMap.get(entity);
-        field[point.y()][point.x()].removeEntity(entity);
+    public void decreaseCounters(Entity entity) {
         if (entityPointMap.containsKey(entity)) {
             if (entity.isPlant()) {
                 plantCnt--;
@@ -96,7 +107,6 @@ public class Field {
                 animalCnt--;
             }
         }
-        entityPointMap.remove(entity);
     }
 
     public void moveEntity(int x, int y, Entity entity) {
@@ -131,8 +141,7 @@ public class Field {
 
     private void checkMaxQuantity(Entity entity, int x, int y) {
         if (field[y][x].entityCnt(entity.getClass()) == entity.maxQuantity()) {
-            throw new IllegalArgumentException(String.format("There is already max amount[%d] of specified " +
-                    "entity[%s} on this location", entity.maxQuantity(), entity.getClass().getSimpleName()));
+            throw new TooMuchEntitiesException(entity.maxQuantity(), entity.getClass());
         }
     }
 

@@ -23,12 +23,6 @@ public abstract class Animal extends Entity {
         populateChancesMap();
     }
 
-    /**
-     * Eat entity
-     *
-     * @param entity entity to eat
-     * @return weight of eaten entity
-     */
     public double eat(Entity entity) {
         if (checkDeathFromHunger()) {
             return 0;
@@ -40,7 +34,7 @@ public abstract class Animal extends Entity {
                 System.out.println(this + " eats " + entity);
                 entity.die();
                 weight += entity.getWeight();
-                return entity.initialWeight();
+                return entity.getWeight();
             }
             return 0;
         }
@@ -108,7 +102,7 @@ public abstract class Animal extends Entity {
         System.out.printf("%s moving %s to %s\n", this, direction, directionPoint);
 
         this.point = new Point(x, y);
-        double eatenWeight = actOnEntityGroup(entityGroup);
+        actOnEntityGroup(entityGroup);
         loseWeight();
 
         if (!checkDeathFromHunger()) {
